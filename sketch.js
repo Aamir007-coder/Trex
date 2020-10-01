@@ -1,27 +1,34 @@
+// Making and initializing values 
 var PLAY = 1;
 var END = 0;
 var gameState = PLAY;
 
+// Making variables
 var trex, trex_running, trex_collided;
 var ground, invisibleGround, groundImage;
-
 var cloudsGroup, cloudImage;
 var obstaclesGroup, obstacle1, obstacle2, obstacle3, obstacle4, obstacle5, obstacle6;
 
+// Score variable with 0 as initial value
 var score=0;
 
+// Game over and restart variable
 var gameOver, restart;
 
 localStorage["HighestScore"] = 0;
 
 function preload(){
+  // Loading  Trex images
   trex_running =   loadAnimation("trex1.png","trex3.png","trex4.png");
   trex_collided = loadAnimation("trex_collided.png");
-
+  
+  // Loading ground image
   groundImage = loadImage("ground2.png");
-
+  
+  // Loading Cloud image
   cloudImage = loadImage("cloud.png");
-
+  
+  // Loading Obstacle images
   obstacle1 = loadImage("obstacle1.png");
   obstacle2 = loadImage("obstacle2.png");
   obstacle3 = loadImage("obstacle3.png");
@@ -29,6 +36,7 @@ function preload(){
   obstacle5 = loadImage("obstacle5.png");
   obstacle6 = loadImage("obstacle6.png");
 
+  // Loading game over and restart image
   gameOverImg = loadImage("gameOver.png");
   restartImg = loadImage("restart.png");
 }
@@ -36,32 +44,46 @@ function preload(){
 function setup() {
   createCanvas(600, 200);
 
+  //creating a trex sprite
   trex = createSprite(50,180,20,50);
 
+  //Adding animation
   trex.addAnimation("running", trex_running);
   trex.addAnimation("collided", trex_collided);
+  
+  // adjusting animation size
   trex.scale = 0.5;
 
+  // Creating a groung sprite
   ground = createSprite(200,180,400,20);
+  // Adding image
   ground.addImage("ground",groundImage);
+  // To make ground look moving infinitely
   ground.x = ground.width /2;
+  // Giving a x-axis velocity to the ground
   ground.velocityX = -(6 + 3*score/100);
 
+  // Creating a srite and adding image to it
   gameOver = createSprite(300,100);
   gameOver.addImage(gameOverImg);
 
+  // Creating a srite and adding image to it
   restart = createSprite(300,140);
   restart.addImage(restartImg);
 
+  // Adjusting size of animation(images)
   gameOver.scale = 0.5;
   restart.scale = 0.5;
 
+  // Making gameover and restart invisible
   gameOver.visible = false;
   restart.visible = false;
 
+  // Creating a invisible ground
   invisibleGround = createSprite(200,190,400,10);
   invisibleGround.visible = false;
 
+  // creating groups
   cloudsGroup = new Group();
   obstaclesGroup = new Group();
 
@@ -69,10 +91,13 @@ function setup() {
 }
 
 function draw() {
-  //trex.debug = true;
+
   background(255);
+  
+  // Display score
   text("Score: "+ score, 500,50);
 
+  
   if (gameState===PLAY){
     score = score + Math.round(getFrameRate()/60);
     ground.velocityX = -(6 + 3*score/100);
